@@ -9,3 +9,7 @@
 
 controllers:
     resource: routing.controllers
+    prefix: /api
+    name_prefix: api_
+    defaults:
+        _format: json

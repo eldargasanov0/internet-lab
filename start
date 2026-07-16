@@ -1,0 +1,52 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+cd "$(dirname "$0")"
+
+COMPOSE=(docker compose -f docker/docker-compose.local.yml)
+
+ensure_env() {
+  local target="$1"
+  local example="${target}.example"
+
+  if [[ -f "$target" ]]; then
+    return 0
+  fi
+
+  if [[ ! -f "$example" ]]; then
+    echo "ERROR: $target is missing and $example was not found." >&2
+    exit 1
+  fi
+
+  echo "==> Creating $target from $example"
+  cp "$example" "$target"
+}
+
+ensure_env docker/.env
+ensure_env back/.env
+
+echo "==> Checking for git updates..."
+if git fetch --quiet 2>/dev/null; then
+  local_ref="$(git rev-parse HEAD)"
+  if remote_ref="$(git rev-parse '@{u}' 2>/dev/null)"; then
+    if [[ "$local_ref" != "$remote_ref" ]]; then
+      echo "==> Pulling latest changes..."
+      git pull
+    else
+      echo "==> Already up to date."
+    fi
+  else
+    echo "==> No upstream branch configured; skipping git update."
+  fi
+else
+  echo "==> Could not reach remote; skipping git update."
+fi
+
+if [[ -n "$("${COMPOSE[@]}" ps -q --status running 2>/dev/null)" ]]; then
+  echo "==> Containers are running — rebuilding and restarting..."
+else
+  echo "==> Containers are not running — building and starting..."
+fi
+"${COMPOSE[@]}" up -d --build
+
+echo "==> Done. Containers are up."

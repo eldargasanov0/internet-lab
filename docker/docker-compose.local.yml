@@ -1,0 +1,50 @@
+services:
+  db:
+    container_name: ${PROJECT_NAME}-db
+    image: postgres:17-alpine
+    env_file:
+      - .env
+    expose:
+      - "5432"
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U app -d app"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  back:
+    container_name: ${PROJECT_NAME}-back
+    build:
+      context: ../back
+      dockerfile: ../docker/back/Dockerfile
+    depends_on:
+      db:
+        condition: service_healthy
+    env_file:
+      - .env
+    volumes:
+      - ../back:/app
+      - back-vendor:/app/vendor
+      - back-var:/app/var
+    expose:
+      - "9000"
+
+  nginx:
+    container_name: ${PROJECT_NAME}-nginx
+    image: nginx:alpine
+    env_file:
+      - .env
+    depends_on:
+      - back
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/conf.d/default.conf:ro
+      - ../back:/app
+
+volumes:
+  db-data:
+  back-vendor:
+  back-var:
