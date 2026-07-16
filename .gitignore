@@ -1,0 +1,11 @@
+###> phpstorm ###
+/.idea/
+###< phpstorm ###
+
+###> cursor ###
+/.cursor/
+###< cursor ###
+
+###> omp ###
+/.omp/
+###< omp ###
