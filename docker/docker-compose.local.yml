@@ -7,12 +7,12 @@ services:
     expose:
       - "5432"
     volumes:
-      - db-data:/var/lib/postgresql/data
+      - db-data:/var/lib/postgresql/data:rw
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U app -d app"]
-      interval: 5s
+      test: ["CMD", "pg_isready", "-d", "${POSTGRES_DB:-app}", "-U", "${POSTGRES_USER:-app}"]
       timeout: 5s
       retries: 5
+      start_period: 60s
 
   back:
     container_name: ${PROJECT_NAME}-back
@@ -26,8 +26,6 @@ services:
       - .env
     volumes:
       - ../back:/app
-      - back-vendor:/app/vendor
-      - back-var:/app/var
     expose:
       - "9000"
 
@@ -46,5 +44,3 @@ services:
 
 volumes:
   db-data:
-  back-vendor:
-  back-var:
