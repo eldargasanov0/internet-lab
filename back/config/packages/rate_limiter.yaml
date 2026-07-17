@@ -1,0 +1,10 @@
+framework:
+    rate_limiter:
+        api_ip:
+            policy: fixed_window
+            limit: 100
+            interval: '1 minute'
+        contact_feedback:
+            policy: fixed_window
+            limit: 1
+            interval: '1 minute'

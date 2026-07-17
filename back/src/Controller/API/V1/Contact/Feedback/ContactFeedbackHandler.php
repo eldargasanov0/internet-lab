@@ -6,6 +6,7 @@ namespace App\Controller\API\V1\Contact\Feedback;
 
 use App\Entity\UserFeedback;
 use App\Message\SendContactFeedbackEmails\SendContactFeedbackEmailsMessage;
+use App\Service\RateLimit\ContactFeedbackRateLimiter;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Messenger\MessageBusInterface;
 
@@ -14,11 +15,14 @@ readonly class ContactFeedbackHandler
     public function __construct(
         private EntityManagerInterface $entityManager,
         private MessageBusInterface $messageBus,
+        private ContactFeedbackRateLimiter $contactFeedbackRateLimiter,
     ) {
     }
 
     public function __invoke(ContactFeedbackRequest $request): ContactFeedbackResponse
     {
+        $this->contactFeedbackRateLimiter->assertCanSubmit($request->email);
+
         $feedback = new UserFeedback()
             ->setName($request->name)
             ->setPhone($request->phone)
