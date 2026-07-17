@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Enum;
 
-enum ExceptionProblemType: string
+enum ExceptionProblemEnum: string
 {
     case VALIDATION = 'errors.validation';
     case REQUEST = 'errors.request';

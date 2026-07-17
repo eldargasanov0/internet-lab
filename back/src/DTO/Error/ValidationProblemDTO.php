@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\DTO\Error;
 
-use App\Enum\ExceptionProblemType;
+use App\Enum\ExceptionProblemEnum;
 
 readonly class ValidationProblemDTO extends ProblemDetailsDTO
 {
@@ -19,10 +19,10 @@ readonly class ValidationProblemDTO extends ProblemDetailsDTO
         public array $violations,
     ) {
         parent::__construct(
-            type: ExceptionProblemType::VALIDATION->value,
-            title: ExceptionProblemType::VALIDATION->getTitle(),
+            type: ExceptionProblemEnum::VALIDATION->value,
+            title: ExceptionProblemEnum::VALIDATION->getTitle(),
             status: $status,
-            detail: ExceptionProblemType::VALIDATION->getTitle(),
+            detail: ExceptionProblemEnum::VALIDATION->getTitle(),
             instance: $instance,
             headers: $headers,
         );

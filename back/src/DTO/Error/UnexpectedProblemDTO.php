@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\DTO\Error;
 
-use App\Enum\ExceptionProblemType;
+use App\Enum\ExceptionProblemEnum;
 use Symfony\Component\HttpFoundation\Response;
 
 readonly class UnexpectedProblemDTO extends ProblemDetailsDTO
@@ -14,10 +14,10 @@ readonly class UnexpectedProblemDTO extends ProblemDetailsDTO
         ?string $instance = null,
     ) {
         parent::__construct(
-            type: ExceptionProblemType::INTERNAL->value,
-            title: ExceptionProblemType::INTERNAL->getTitle(),
+            type: ExceptionProblemEnum::INTERNAL->value,
+            title: ExceptionProblemEnum::INTERNAL->getTitle(),
             status: Response::HTTP_INTERNAL_SERVER_ERROR,
-            detail: $detail ?? ExceptionProblemType::INTERNAL->getTitle(),
+            detail: $detail ?? ExceptionProblemEnum::INTERNAL->getTitle(),
             instance: $instance,
         );
     }

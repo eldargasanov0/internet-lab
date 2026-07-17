@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\DTO\Error;
 
-use App\Enum\ExceptionProblemType;
+use App\Enum\ExceptionProblemEnum;
 
 readonly class HttpProblemDTO extends ProblemDetailsDTO
 {
@@ -18,8 +18,8 @@ readonly class HttpProblemDTO extends ProblemDetailsDTO
         array $headers = [],
     ) {
         parent::__construct(
-            type: ExceptionProblemType::REQUEST->value,
-            title: ExceptionProblemType::REQUEST->getTitle(),
+            type: ExceptionProblemEnum::REQUEST->value,
+            title: ExceptionProblemEnum::REQUEST->getTitle(),
             status: $status,
             detail: $detail,
             instance: $instance,

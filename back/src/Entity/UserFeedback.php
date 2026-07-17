@@ -25,6 +25,9 @@ class UserFeedback
     #[ORM\Column(length: 255)]
     private ?string $comment = null;
 
+    #[ORM\OneToOne(mappedBy: 'feedback', cascade: ['persist', 'remove'])]
+    private ?UserFeedbackReview $review = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -74,6 +77,23 @@ class UserFeedback
     public function setComment(string $comment): static
     {
         $this->comment = $comment;
+
+        return $this;
+    }
+
+    public function getReview(): ?UserFeedbackReview
+    {
+        return $this->review;
+    }
+
+    public function setReview(UserFeedbackReview $review): static
+    {
+        // set the owning side of the relation if necessary
+        if ($review->getFeedback() !== $this) {
+            $review->setFeedback($this);
+        }
+
+        $this->review = $review;
 
         return $this;
     }
