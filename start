@@ -57,6 +57,15 @@ fi
 
 ok "Done. Containers are up."
 
+log "Checking PHP dependencies..."
+if [[ ! -f ./back/vendor/autoload.php ]]; then
+  log "vendor/ missing — running composer install..."
+  docker exec -t internet-lab-back composer install
+  ok "Dependencies installed"
+else
+  ok "Dependencies already present"
+fi
+
 log "Starting migrations..."
 if compgen -G "./back/migrations/*.php" > /dev/null; then
   docker exec -t internet-lab-back php bin/console doctrine:migrations:migrate --no-interaction
