@@ -59,6 +59,7 @@ ok "Done. Containers are up."
 
 log "Installing Composer dependencies..."
 "${COMPOSE[@]}" run --rm --no-deps back composer install --no-interaction
+"${COMPOSE[@]}" up -d
 ok "Composer dependencies installed."
 
 log "Starting migrations..."
