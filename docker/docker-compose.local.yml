@@ -4,8 +4,8 @@ services:
     image: postgres:17-alpine
     env_file:
       - .env
-    expose:
-      - "5432"
+    ports:
+      - "5432:5432"
     volumes:
       - db-data:/var/lib/postgresql/data:rw
     healthcheck:
@@ -26,8 +26,20 @@ services:
       - .env
     volumes:
       - ../back:/app
-    expose:
-      - "9000"
+
+  messenger:
+    container_name: ${PROJECT_NAME}-messenger
+    build:
+      context: ../back
+      dockerfile: ../docker/back/Dockerfile
+    depends_on:
+      db:
+        condition: service_healthy
+    env_file:
+      - .env
+    volumes:
+      - ../back:/app
+    command: php bin/console messenger:consume async --time-limit=3600 --memory-limit=256M
 
   nginx:
     container_name: ${PROJECT_NAME}-nginx
