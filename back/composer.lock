@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "b9df094cbe00bf9b440400f6faf08d87",
+    "content-hash": "814c583e7a84daabae214205c393e7db",
     "packages": [
         {
             "name": "doctrine/collections",
@@ -2074,6 +2074,91 @@
                 }
             ],
             "time": "2026-07-16T11:42:34+00:00"
+        },
+        {
+            "name": "symfony/ai-generic-platform",
+            "version": "v0.11.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/ai-generic-platform.git",
+                "reference": "b56ea991a4232ea16204960ab8dc8a1da44cb320"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/ai-generic-platform/zipball/b56ea991a4232ea16204960ab8dc8a1da44cb320",
+                "reference": "b56ea991a4232ea16204960ab8dc8a1da44cb320",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=8.2",
+                "symfony/ai-platform": "^0.11",
+                "symfony/http-client": "^7.3|^8.0"
+            },
+            "require-dev": {
+                "phpstan/phpstan": "^2.1",
+                "phpstan/phpstan-phpunit": "^2.0",
+                "phpstan/phpstan-strict-rules": "^2.0",
+                "phpunit/phpunit": "^11.5.53"
+            },
+            "type": "symfony-ai-platform",
+            "extra": {
+                "thanks": {
+                    "url": "https://github.com/symfony/ai",
+                    "name": "symfony/ai"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Symfony\\AI\\Platform\\Bridge\\Generic\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Christopher Hertel",
+                    "email": "mail@christopher-hertel.de"
+                },
+                {
+                    "name": "Oskar Stark",
+                    "email": "oskarstark@googlemail.com"
+                },
+                {
+                    "name": "Symfony Community",
+                    "homepage": "https://symfony.com/contributors"
+                }
+            ],
+            "description": "Generic platform bridge for Symfony AI",
+            "keywords": [
+                "Bridge",
+                "ai",
+                "generic",
+                "platform"
+            ],
+            "support": {
+                "source": "https://github.com/symfony/ai-generic-platform/tree/v0.11.0"
+            },
+            "funding": [
+                {
+                    "url": "https://symfony.com/sponsor",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/fabpot",
+                    "type": "github"
+                },
+                {
+                    "url": "https://github.com/nicolas-grekas",
+                    "type": "github"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
+                    "type": "tidelift"
+                }
+            ],
+            "time": "2026-07-15T00:58:20+00:00"
         },
         {
             "name": "symfony/ai-platform",
