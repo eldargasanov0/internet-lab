@@ -26,6 +26,7 @@ services:
       - .env
     volumes:
       - ../back:/app
+      - back-vendor:/app/vendor
 
   messenger:
     container_name: ${PROJECT_NAME}-messenger
@@ -39,6 +40,7 @@ services:
       - .env
     volumes:
       - ../back:/app
+      - back-vendor:/app/vendor
     command: php bin/console messenger:consume async --time-limit=3600 --memory-limit=256M
 
   nginx:
@@ -65,3 +67,4 @@ services:
 
 volumes:
   db-data:
+  back-vendor:
