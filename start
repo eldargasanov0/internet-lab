@@ -57,6 +57,10 @@ fi
 
 ok "Done. Containers are up."
 
+log "Installing Composer dependencies..."
+"${COMPOSE[@]}" run --rm --no-deps back composer install --no-interaction
+ok "Composer dependencies installed."
+
 log "Starting migrations..."
 if compgen -G "./back/migrations/*.php" > /dev/null; then
   docker exec -t internet-lab-back php bin/console doctrine:migrations:migrate --no-interaction
