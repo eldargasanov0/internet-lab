@@ -5,6 +5,10 @@ cd "$(dirname "$0")"
 
 COMPOSE=(docker compose -f docker/docker-compose.local.yml)
 
+log() { echo "👉 $*"; }
+ok()  { echo "✅ $*"; }
+err() { echo "❌ $*" >&2; }
+
 ensure_env() {
   local target="$1"
   local example="${target}.example"
@@ -14,39 +18,53 @@ ensure_env() {
   fi
 
   if [[ ! -f "$example" ]]; then
-    echo "ERROR: $target is missing and $example was not found." >&2
+    err "ERROR: $target is missing and $example was not found."
     exit 1
   fi
 
-  echo "==> Creating $target from $example"
+  log "Creating $target from $example"
   cp "$example" "$target"
+  ok "Created $target from $example"
 }
 
 ensure_env docker/.env
 ensure_env back/.env
 
-echo "==> Checking for git updates..."
+log "Checking for git updates..."
 if git fetch --quiet 2>/dev/null; then
   local_ref="$(git rev-parse HEAD)"
   if remote_ref="$(git rev-parse '@{u}' 2>/dev/null)"; then
     if [[ "$local_ref" != "$remote_ref" ]]; then
-      echo "==> Pulling latest changes..."
+      log "Pulling latest changes..."
       git pull
+      ok "Pulled latest changes"
     else
-      echo "==> Already up to date."
+      ok "Already up to date."
     fi
   else
-    echo "==> No upstream branch configured; skipping git update."
+    log "No upstream branch configured; skipping git update."
   fi
 else
-  echo "==> Could not reach remote; skipping git update."
+  log "Could not reach remote; skipping git update."
 fi
 
 if [[ -n "$("${COMPOSE[@]}" ps -q --status running 2>/dev/null)" ]]; then
-  echo "==> Containers are running — rebuilding and restarting..."
+  log "Containers are running — rebuilding and restarting..."
 else
-  echo "==> Containers are not running — building and starting..."
+  log "Containers are not running — building and starting..."
 fi
 "${COMPOSE[@]}" up -d --build
 
-echo "==> Done. Containers are up."
+ok "Done. Containers are up."
+
+log "Starting migrations..."
+if compgen -G "./back/migrations/*.php" > /dev/null; then
+  docker exec -t internet-lab-back php bin/console doctrine:migrations:migrate --no-interaction
+  ok "Migrations: Done"
+else
+  log "No migrations found; skipping"
+fi
+
+echo ""
+echo ""
+echo "🎉 Ready!"
