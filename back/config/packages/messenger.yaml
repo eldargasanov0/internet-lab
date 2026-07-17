@@ -21,6 +21,7 @@ framework:
         routing:
             # Route your messages to the transports
             'App\Message\SendContactFeedbackEmails\SendContactFeedbackEmailsMessage': async
+            'App\Message\ReviewContactFeedback\ReviewContactFeedbackMessage': async
 
 # when@test:
 #    framework:

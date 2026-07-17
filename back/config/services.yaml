@@ -9,6 +9,12 @@
 parameters:
     app.admin_email: '%env(ADMIN_EMAIL)%'
     app.mailer_from: '%env(MAILER_FROM)%'
+    # User message template for contact feedback AI review ({comment} = feedback body).
+    # Injected by AIR-004; editable without changing PHP service logic.
+    app.ai.contact_review.user_prompt_template: |
+        Проанализируй следующий отзыв пользователя:
+
+        {comment}
 
 services:
     # default configuration for services in *this* file
@@ -28,3 +34,7 @@ services:
         bind:
             $adminEmail: '%app.admin_email%'
             $mailerFrom: '%app.mailer_from%'
+
+    App\Service\AI\ContactFeedbackReviewer:
+        bind:
+            $userPromptTemplate: '%app.ai.contact_review.user_prompt_template%'

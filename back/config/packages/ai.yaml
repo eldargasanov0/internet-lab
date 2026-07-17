@@ -2,26 +2,38 @@ ai:
     platform:
         # Inference Platform configuration
         # see https://github.com/symfony/ai/tree/main/src/platform#platform-bridges
-
-        # openai:
-        #    api_key: '%env(OPENAI_API_KEY)%'
+        #
+        # OpenAI-compatible generic platform. Base URL includes /api/v1 (or /v1), so paths
+        # omit the leading /v1 (default generic paths would otherwise double it).
+        # Platform service id: ai.platform.generic.default
+        generic:
+            default:
+                base_url: '%env(GENERIC_BASE_URL)%'
+                api_key: '%env(GENERIC_API_KEY)%'
+                http_client: 'ai.http_client.generic'
+                supports_completions: true
+                supports_embeddings: false
+                completions_path: '/chat/completions'
 
     agent:
         # Agent configuration
         # see https://symfony.com/doc/current/ai/bundles/ai-bundle.html
+        # Service id: ai.agent.contact_feedback_review
+        contact_feedback_review:
+            platform: 'ai.platform.generic.default'
+            model: '%env(GENERIC_MODEL)%'
+            prompt:
+                text: |
+                    Вы — рецензент обратной связи из формы контактов для службы поддержки продукта.
 
-        # default:
-        #    platform: 'ai.platform.openai'
-        #    model: 'gpt-5-mini'
-        #    prompt: |
-        #        You are a pirate and you write funny.
-        #    tools:
-        #        - 'Symfony\AI\Agent\Bridge\Clock\Clock'
+                    Проанализируйте сообщение пользователя и:
+                    1. Определите общий тон, используя ровно одно из значений: positive, neutral, negative, mixed.
+                    2. Напишите краткий отзыв на русском (1–3 предложения), суммирующий обратную связь.
+
+                    Ответьте только JSON — без markdown-блоков и без лишнего текста. Точный формат:
+                    {"tone":"negative","comment":"..."}
+
+                    Поле "tone" ОБЯЗАТЕЛЬНО должно быть одним из: positive, neutral, negative, mixed.
 
     store:
         # Store configuration
-
-        # chromadb:
-        #    default:
-        #        client: 'client.service.id'
-        #        collection: 'my_collection'

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Controller\API\V1\Contact\Feedback;
 
 use App\Entity\UserFeedback;
+use App\Message\ReviewContactFeedback\ReviewContactFeedbackMessage;
 use App\Message\SendContactFeedbackEmails\SendContactFeedbackEmailsMessage;
 use App\Service\RateLimit\ContactFeedbackRateLimiter;
 use Doctrine\ORM\EntityManagerInterface;
@@ -38,6 +39,10 @@ readonly class ContactFeedbackHandler
             phone: $feedback->getPhone(),
             email: $feedback->getEmail(),
             comment: $feedback->getComment(),
+        ));
+
+        $this->messageBus->dispatch(new ReviewContactFeedbackMessage(
+            feedbackId: $feedback->getId(),
         ));
 
         return new ContactFeedbackResponse(

@@ -1,0 +1,9 @@
+framework:
+    http_client:
+        scoped_clients:
+            # Dedicated client for the generic AI platform so AI workers do not hang indefinitely.
+            # Service id: ai.http_client.generic (wired in config/packages/ai.yaml).
+            ai.http_client.generic:
+                base_uri: '%env(GENERIC_BASE_URL)%'
+                timeout: 15
+                max_duration: 30
