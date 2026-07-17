@@ -55,7 +55,6 @@ ok "Done. Containers are up."
 
 log "Installing Composer dependencies..."
 "${COMPOSE[@]}" run --rm --no-deps back composer install --no-interaction
-"${COMPOSE[@]}" up -d
 ok "Composer dependencies installed."
 
 log "Starting migrations..."
@@ -65,6 +64,8 @@ if compgen -G "./back/migrations/*.php" > /dev/null; then
 else
   log "No migrations found; skipping"
 fi
+
+"${COMPOSE[@]}" up -d
 
 echo ""
 echo ""
