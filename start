@@ -13,10 +13,6 @@ ensure_env() {
   local target="$1"
   local example="${target}.example"
 
-  if [[ -f "$target" ]]; then
-    return 0
-  fi
-
   if [[ ! -f "$example" ]]; then
     err "ERROR: $target is missing and $example was not found."
     exit 1
