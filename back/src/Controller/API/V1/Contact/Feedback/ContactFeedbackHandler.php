@@ -5,12 +5,15 @@ declare(strict_types=1);
 namespace App\Controller\API\V1\Contact\Feedback;
 
 use App\Entity\UserFeedback;
+use App\Message\SendContactFeedbackEmails\SendContactFeedbackEmailsMessage;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\Messenger\MessageBusInterface;
 
 readonly class ContactFeedbackHandler
 {
     public function __construct(
-        private EntityManagerInterface $entityManager
+        private EntityManagerInterface $entityManager,
+        private MessageBusInterface $messageBus,
     ) {
     }
 
@@ -24,6 +27,14 @@ readonly class ContactFeedbackHandler
 
         $this->entityManager->persist($feedback);
         $this->entityManager->flush();
+
+        $this->messageBus->dispatch(new SendContactFeedbackEmailsMessage(
+            id: $feedback->getId(),
+            name: $feedback->getName(),
+            phone: $feedback->getPhone(),
+            email: $feedback->getEmail(),
+            comment: $feedback->getComment(),
+        ));
 
         return new ContactFeedbackResponse(
             id: $feedback->getId(),

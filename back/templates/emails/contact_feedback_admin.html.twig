@@ -1,0 +1,28 @@
+{% extends 'emails/base.html.twig' %}
+
+{% block title %}Новое обращение #{{ id }}{% endblock %}
+
+{% block body %}
+    <h1 style="margin:0 0 16px;font-size:20px;font-weight:bold;">Новое обращение #{{ id }}</h1>
+    <p style="margin:0 0 16px;">Поступило сообщение через форму обратной связи.</p>
+    <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="border-collapse:collapse;">
+        <tr>
+            <td style="padding:8px 0;border-bottom:1px solid #eee;width:120px;color:#666;vertical-align:top;">Имя</td>
+            <td style="padding:8px 0;border-bottom:1px solid #eee;vertical-align:top;">{{ name }}</td>
+        </tr>
+        <tr>
+            <td style="padding:8px 0;border-bottom:1px solid #eee;color:#666;vertical-align:top;">Телефон</td>
+            <td style="padding:8px 0;border-bottom:1px solid #eee;vertical-align:top;">{{ phone }}</td>
+        </tr>
+        <tr>
+            <td style="padding:8px 0;border-bottom:1px solid #eee;color:#666;vertical-align:top;">Email</td>
+            <td style="padding:8px 0;border-bottom:1px solid #eee;vertical-align:top;">
+                <a href="mailto:{{ submitterEmail }}">{{ submitterEmail }}</a>
+            </td>
+        </tr>
+        <tr>
+            <td style="padding:8px 0;color:#666;vertical-align:top;">Сообщение</td>
+            <td style="padding:8px 0;vertical-align:top;white-space:pre-wrap;">{{ comment }}</td>
+        </tr>
+    </table>
+{% endblock %}
